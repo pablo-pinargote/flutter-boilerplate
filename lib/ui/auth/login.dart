@@ -1,25 +1,22 @@
-import 'package:either_option/either_option.dart';
 import 'package:flutter/material.dart';
-import 'package:injectable/injectable.dart';
-import 'package:playground/services/_results/failure.dart';
-import 'package:playground/services/auth/get_session.dart';
 import 'package:playground/services/_models/user.dart';
 
-import '../di.dart';
+import '../../di.dart';
+import 'login_presenter.dart';
 
-class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _LoginState createState() => _LoginState();
 }
 
-class _HomeState extends State<Home> implements HomeContract {
+class _LoginState extends State<Login> implements LoginContract {
 
-  HomePresenter? _presenter;
+  LoginPresenter? _presenter;
 
-  _HomeState() {
-    _presenter = getIt<HomePresenter>(param1: this);
+  _LoginState() {
+    _presenter = getIt<LoginPresenter>(param1: this);
   }
 
   @override
@@ -107,34 +104,5 @@ class _HomeState extends State<Home> implements HomeContract {
         );
       },
     );
-  }
-}
-
-abstract class HomeContract {
-  void showAccessToken(User user);
-  void showFailureType(String type);
-}
-
-@injectable
-class HomePresenter {
-  HomeContract? _view;
-
-  GetSessionContract? _getSession;
-  HomePresenter(GetSessionContract s, @factoryParam HomeContract? c) {
-    _getSession = s;
-    _view = c;
-  }
-
-  void setView(HomeContract view) {
-    _view = view;
-  }
-
-  void validateSession(userName, password) async {
-    Either<User, Failure> getSessionResult = await _getSession!.execute(userName, password);
-    getSessionResult.fold((user) => {
-      _view!.showAccessToken(user)
-    }, (failure) => {
-      _view!.showFailureType(failure.runtimeType.toString())
-    });
   }
 }

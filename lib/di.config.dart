@@ -11,7 +11,8 @@ import 'services/_contracts/third_party_services/auth_services_contract.dart'
     as _i3;
 import 'services/auth/get_session.dart' as _i5;
 import 'third_party_services/provisioning/auth_services.dart' as _i4;
-import 'ui/home.dart' as _i6; // ignore_for_file: unnecessary_lambdas
+import 'ui/auth/login_presenter.dart'
+    as _i6; // ignore_for_file: unnecessary_lambdas
 
 // ignore_for_file: lines_longer_than_80_chars
 /// initializes the registration of provided dependencies inside of [GetIt]
@@ -21,7 +22,7 @@ _i1.GetIt $initGetIt(_i1.GetIt get,
   gh.factory<_i3.AuthServicesContract>(() => _i4.AuthServices());
   gh.factory<_i5.GetSessionContract>(
       () => _i5.GetSession(get<_i3.AuthServicesContract>()));
-  gh.factoryParam<_i6.HomePresenter, _i6.HomeContract?, dynamic>(
-      (c, _) => _i6.HomePresenter(get<_i5.GetSessionContract>(), c));
+  gh.factoryParam<_i6.LoginPresenter, _i6.LoginContract?, dynamic>(
+      (view, _) => _i6.LoginPresenter(get<_i5.GetSessionContract>(), view));
   return get;
 }
